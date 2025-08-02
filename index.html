@@ -266,13 +266,6 @@
             color: #0c2461;
         }
         
-        .result-percentage {
-            font-size: 1.4rem;
-            color: #2ed573;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        
         .progress-container {
             height: 20px;
             background: #e0e0e0;
@@ -386,45 +379,6 @@
             background-color: #e6f2ff;
         }
         
-        .system-info {
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-            border: 1px solid #eee;
-        }
-        
-        .system-info h4 {
-            color: #0c2461;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        
-        .system-info p {
-            line-height: 1.6;
-            margin-bottom: 10px;
-        }
-        
-        .conversion-explanation {
-            background: #f0f8ff;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-            border-left: 4px solid #1e90ff;
-        }
-        
-        .conversion-explanation h4 {
-            color: #0c2461;
-            margin-bottom: 10px;
-        }
-        
-        .highlight {
-            background-color: #fffacd;
-            padding: 3px 6px;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-        
         .units-info {
             background: #e9f7fe;
             border-radius: 10px;
@@ -440,6 +394,62 @@
             color: #0c2461;
             margin-top: 5px;
         }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background: #f0f8ff;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        
+        .result-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #0c2461;
+        }
+        
+        .gpa-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3799;
+        }
+        
+        .summary-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            border: 1px solid #e0e0e0;
+        }
+        
+        .summary-card h3 {
+            color: #0c2461;
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #1e90ff;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed #ddd;
+        }
+        
+        .summary-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .summary-value {
+            font-weight: 700;
+            color: #0c2461;
+        }
     </style>
 </head>
 <body>
@@ -449,7 +459,7 @@
                 <i class="fas fa-graduation-cap"></i>
             </div>
             <h1>حاسبة المعدل الجامعي</h1>
-            <p>جامعة بنغازي - كلية الهندسة والنفط - نظام التقييم الجديد</p>
+            <p>جامعة بنغازي - كلية الهندسة والنفط</p>
         </header>
         
         <div class="content">
@@ -548,7 +558,26 @@
                     <div class="progress-container">
                         <div class="progress-bar" id="cumulative-progress"></div>
                     </div>
-                    <div class="result-percentage" id="percentage">-</div>
+                </div>
+                
+                <div class="summary-card">
+                    <h3><i class="fas fa-chart-bar"></i> ملخص النتائج</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">وحدات الفصل الحالي:</span>
+                        <span class="summary-value" id="summary-term-units">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">المعدل الفصلي:</span>
+                        <span class="summary-value" id="summary-term-gpa">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">إجمالي الوحدات:</span>
+                        <span class="summary-value" id="summary-cumulative-units">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">المعدل التراكمي:</span>
+                        <span class="summary-value" id="summary-cumulative-gpa">-</span>
+                    </div>
                 </div>
                 
                 <div class="instructions">
@@ -560,17 +589,6 @@
                         <li>انقر على "احسب المعدل" لرؤية النتائج</li>
                         <li>يمكنك مسح البيانات وإعادة الحساب من جديد</li>
                     </ul>
-                </div>
-                
-                <div class="conversion-explanation">
-                    <h4><i class="fas fa-calculator"></i> توضيح حساب النسبة المئوية</h4>
-                    <p>النسبة المئوية تحسب حسب المعادلات التالية:</p>
-                    <p>• المعدل 0 → 35%</p>
-                    <p>• المعدل 1 → 50%</p>
-                    <p>• المعدل 2 → 65%</p>
-                    <p>• المعدل 3 → 80%</p>
-                    <p>• المعدل 4 → 95% (أو 100% إذا كان 3.33+ حسب القاعدة الخاصة)</p>
-                    <p>• بين المستويات: يتم حسابها باستخدام الاستيفاء الخطي</p>
                 </div>
                 
                 <div class="grade-info">
@@ -861,25 +879,6 @@
                 return 0.00;
             }
             
-            // Convert GPA to percentage according to Benghazi University system
-            function convertGPAtoPercentage(gpa) {
-                // تطبيق المعادلات الصحيحة كما أوضحتها
-                if (gpa <= 1) {
-                    // المعدل بين 0 و1: النسبة = 35 + (المعدل * 15)
-                    return 35 + (gpa * 15);
-                } else if (gpa <= 2) {
-                    // المعدل بين 1 و2: النسبة = 50 + ((المعدل - 1) * 15)
-                    return 50 + ((gpa - 1) * 15);
-                } else if (gpa <= 3) {
-                    // المعدل بين 2 و3: النسبة = 65 + ((المعدل - 2) * 15)
-                    return 65 + ((gpa - 2) * 15);
-                } else {
-                    // التصحيح الهام: الفترة بين 3 و4 هي 15% وليست 20%
-                    // المعدل بين 3 و4: النسبة = 80 + ((المعدل - 3) * 15)
-                    return 80 + ((gpa - 3) * 15);
-                }
-            }
-            
             // Calculate GPA
             function calculateGPA() {
                 const prevHours = parseFloat(document.getElementById('prev-hours').value) || 0;
@@ -919,18 +918,11 @@
                 // Calculate cumulative GPA
                 const cumulativeGPA = cumulativeHours > 0 ? cumulativePoints / cumulativeHours : 0;
                 
-                // Calculate percentage according to university regulations
-                const percentage = convertGPAtoPercentage(cumulativeGPA).toFixed(1);
-                
-                // تطبيق القاعدة الخاصة للمعدل 4 (95-100 تعطي 100%)
-                const finalPercentage = cumulativeGPA >= 3.33 ? 100 : percentage;
-                
                 return {
                     termHours: termHours,
                     cumulativeHours: cumulativeHours,
                     termGPA: termGPA.toFixed(2),
                     cumulativeGPA: cumulativeGPA.toFixed(2),
-                    percentage: finalPercentage + '%',
                     termProgress: (termGPA * 100 / 4),
                     cumulativeProgress: (cumulativeGPA * 100 / 4)
                 };
@@ -945,11 +937,17 @@
                 
                 const results = calculateGPA();
                 
+                // Update main results
                 document.getElementById('term-units').textContent = results.termHours;
                 document.getElementById('term-gpa').textContent = results.termGPA;
                 document.getElementById('cumulative-units').textContent = results.cumulativeHours;
                 document.getElementById('cumulative-gpa').textContent = results.cumulativeGPA;
-                document.getElementById('percentage').textContent = results.percentage;
+                
+                // Update summary card
+                document.getElementById('summary-term-units').textContent = results.termHours;
+                document.getElementById('summary-term-gpa').textContent = results.termGPA;
+                document.getElementById('summary-cumulative-units').textContent = results.cumulativeHours;
+                document.getElementById('summary-cumulative-gpa').textContent = results.cumulativeGPA;
                 
                 // Animate progress bars
                 setTimeout(() => {
@@ -978,7 +976,14 @@
                 document.getElementById('term-gpa').textContent = '-';
                 document.getElementById('cumulative-units').textContent = '-';
                 document.getElementById('cumulative-gpa').textContent = '-';
-                document.getElementById('percentage').textContent = '-';
+                
+                // Clear summary
+                document.getElementById('summary-term-units').textContent = '-';
+                document.getElementById('summary-term-gpa').textContent = '-';
+                document.getElementById('summary-cumulative-units').textContent = '-';
+                document.getElementById('summary-cumulative-gpa').textContent = '-';
+                
+                // Reset progress bars
                 document.getElementById('term-progress').style.width = '0%';
                 document.getElementById('cumulative-progress').style.width = '0%';
                 

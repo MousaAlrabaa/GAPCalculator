@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة المعدل الجامعي - جامعة بنغازي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2980, #26d0ce);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        header {
+            background: linear-gradient(to right, #0c2461, #1e3799);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .university-logo {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 70px;
+            height: 70px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        .university-logo i {
+            font-size: 40px;
+            color: #0c2461;
+        }
+        
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0;
+        }
+        
+        .input-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-right: 1px solid #eee;
+        }
+        
+        .result-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 25px;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .section-title {
+            color: #0c2461;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #1e90ff;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 70px;
+            height: 2px;
+            background: #ff6b6b;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            border-color: #1e90ff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.2);
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(to right, #1e90ff, #3742fa);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(30, 144, 255, 0.4);
+        }
+        
+        .btn-calculate {
+            background: linear-gradient(to right, #2ed573, #1e90ff);
+            font-size: 1.2rem;
+            padding: 16px;
+            margin-top: 25px;
+        }
+        
+        .btn-reset {
+            background: linear-gradient(to right, #ff6b6b, #ff4757);
+            margin-top: 15px;
+        }
+        
+        .courses-container {
+            margin-top: 30px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .course-card {
+            background: #f1f2f6;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            position: relative;
+        }
+        
+        .course-card:hover {
+            transform: translateX(-5px);
+        }
+        
+        .course-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .course-title {
+            font-weight: 600;
+            color: #2f3542;
+        }
+        
+        .delete-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .delete-btn:hover {
+            background: #ff4757;
+        }
+        
+        .course-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .result-box {
+            background: linear-gradient(to right, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+        
+        .result-box:hover {
+            transform: scale(1.03);
+        }
+        
+        .result-label {
+            font-size: 1.2rem;
+            color: #57606f;
+            margin-bottom: 10px;
+        }
+        
+        .result-value {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #0c2461;
+        }
+        
+        .result-percentage {
+            font-size: 1.4rem;
+            color: #2ed573;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        .progress-container {
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #2ed573, #1e90ff);
+            border-radius: 10px;
+            width: 0;
+            transition: width 1.5s ease-out;
+        }
+        
+        .instructions {
+            background: #e9f7fe;
+            border-left: 4px solid #1e90ff;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 25px;
+        }
+        
+        .instructions h3 {
+            color: #0c2461;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ul {
+            padding-right: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #0c2461;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+        }
+        
+        .empty-state i {
+            font-size: 50px;
+            margin-bottom: 15px;
+            color: #b2bec3;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .input-section {
+                border-right: none;
+                border-bottom: 1px solid #eee;
+            }
+            
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .result-value {
+                font-size: 2.2rem;
+            }
+        }
+        
+        .grade-info {
+            background: #e9f7fe;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px solid #cce5ff;
+        }
+        
+        .grade-info h3 {
+            color: #0c2461;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .grade-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .grade-table th, .grade-table td {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #cce5ff;
+        }
+        
+        .grade-table th {
+            background-color: #0c2461;
+            color: white;
+        }
+        
+        .grade-table tr:nth-child(even) {
+            background-color: #e6f2ff;
+        }
+        
+        .system-info {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border: 1px solid #eee;
+        }
+        
+        .system-info h4 {
+            color: #0c2461;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .system-info p {
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .conversion-explanation {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #1e90ff;
+        }
+        
+        .conversion-explanation h4 {
+            color: #0c2461;
+            margin-bottom: 10px;
+        }
+        
+        .highlight {
+            background-color: #fffacd;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .units-info {
+            background: #e9f7fe;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+            border: 1px solid #cce5ff;
+        }
+        
+        .units-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0c2461;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="university-logo">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h1>حاسبة المعدل الجامعي</h1>
+            <p>جامعة بنغازي - كلية الهندسة والنفط - نظام التقييم الجديد</p>
+        </header>
+        
+        <div class="content">
+            <div class="input-section">
+                <h2 class="section-title">بيانات الفصل الدراسي</h2>
+                
+                <div class="form-group">
+                    <label for="prev-hours">عدد الوحدات المنجزة سابقاً:</label>
+                    <input type="number" id="prev-hours" min="0" max="200" placeholder="أدخل عدد الوحدات">
+                </div>
+                
+                <div class="form-group">
+                    <label for="prev-gpa">المعدل التراكمي السابق:</label>
+                    <input type="number" id="prev-gpa" step="0.01" min="0" max="4" placeholder="أدخل المعدل التراكمي">
+                </div>
+                
+                <h2 class="section-title">المواد الجديدة</h2>
+                
+                <div class="form-group">
+                    <label for="new-hours">عدد وحدات المادة:</label>
+                    <input type="number" id="new-hours" min="1" max="10" placeholder="أدخل عدد الوحدات">
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-score">درجة المادة (0-100):</label>
+                    <input type="number" id="new-score" min="0" max="100" placeholder="أدخل الدرجة">
+                </div>
+                
+                <button class="btn" id="add-new-course">
+                    <i class="fas fa-plus-circle"></i> إضافة مادة جديدة
+                </button>
+                
+                <h2 class="section-title">المواد المعادة</h2>
+                
+                <div class="form-group">
+                    <label for="retake-hours">عدد وحدات المادة:</label>
+                    <input type="number" id="retake-hours" min="1" max="10" placeholder="أدخل عدد الوحدات">
+                </div>
+                
+                <div class="form-group">
+                    <label for="prev-score">الدرجة السابقة (0-100):</label>
+                    <input type="number" id="prev-score" min="0" max="100" placeholder="أدخل الدرجة السابقة">
+                </div>
+                
+                <div class="form-group">
+                    <label for="current-score">الدرجة الحالية (0-100):</label>
+                    <input type="number" id="current-score" min="0" max="100" placeholder="أدخل الدرجة الحالية">
+                </div>
+                
+                <button class="btn" id="add-retake-course">
+                    <i class="fas fa-redo-alt"></i> إضافة مادة معادة
+                </button>
+                
+                <h2 class="section-title" style="margin-top: 30px;">المواد المضافة</h2>
+                <div class="courses-container" id="courses-container">
+                    <div class="empty-state">
+                        <i class="fas fa-book-open"></i>
+                        <p>لم تقم بإضافة أي مواد بعد</p>
+                        <p>استخدم الأزرار أعلاه لإضافة مواد جديدة أو معادة</p>
+                    </div>
+                </div>
+                
+                <button class="btn btn-calculate" id="calculate-btn">
+                    <i class="fas fa-calculator"></i> احسب المعدل
+                </button>
+                
+                <button class="btn btn-reset" id="reset-btn">
+                    <i class="fas fa-trash-alt"></i> مسح جميع البيانات
+                </button>
+            </div>
+            
+            <div class="result-section">
+                <h2 class="section-title">نتائج الحساب</h2>
+                
+                <div class="units-info">
+                    <div class="result-label">وحدات الفصل الحالي</div>
+                    <div class="units-value" id="term-units">-</div>
+                </div>
+                
+                <div class="result-box">
+                    <div class="result-label">المعدل الفصلي</div>
+                    <div class="result-value" id="term-gpa">-</div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="term-progress"></div>
+                    </div>
+                </div>
+                
+                <div class="units-info">
+                    <div class="result-label">إجمالي عدد الوحدات</div>
+                    <div class="units-value" id="cumulative-units">-</div>
+                </div>
+                
+                <div class="result-box">
+                    <div class="result-label">المعدل التراكمي</div>
+                    <div class="result-value" id="cumulative-gpa">-</div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="cumulative-progress"></div>
+                    </div>
+                    <div class="result-percentage" id="percentage">-</div>
+                </div>
+                
+                <div class="instructions">
+                    <h3><i class="fas fa-info-circle"></i> تعليمات الاستخدام:</h3>
+                    <ul>
+                        <li>أدخل بيانات الفصل السابق (عدد الوحدات والمعدل التراكمي)</li>
+                        <li>أضف المواد الجديدة التي تدرسها لأول مرة</li>
+                        <li>أضف المواد المعادة مع درجتك السابقة والحالية</li>
+                        <li>انقر على "احسب المعدل" لرؤية النتائج</li>
+                        <li>يمكنك مسح البيانات وإعادة الحساب من جديد</li>
+                    </ul>
+                </div>
+                
+                <div class="conversion-explanation">
+                    <h4><i class="fas fa-calculator"></i> توضيح حساب النسبة المئوية</h4>
+                    <p>النسبة المئوية تحسب حسب المعادلات التالية:</p>
+                    <p>• المعدل 0 → 35%</p>
+                    <p>• المعدل 1 → 50%</p>
+                    <p>• المعدل 2 → 65%</p>
+                    <p>• المعدل 3 → 80%</p>
+                    <p>• المعدل 4 → 100%</p>
+                    <p>• بين المستويات: يتم حسابها باستخدام الاستيفاء الخطي</p>
+                </div>
+                
+                <div class="grade-info">
+                    <h3><i class="fas fa-table"></i> نظام التقييم حسب لائحة جامعة بنغازي</h3>
+                    <table class="grade-table">
+                        <thead>
+                            <tr>
+                                <th>الدرجة (%)</th>
+                                <th>النقاط</th>
+                                <th>التقدير</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>95-100</td>
+                                <td>4.00</td>
+                                <td>A (ممتاز)</td>
+                            </tr>
+                            <tr>
+                                <td>90-94</td>
+                                <td>3.67-3.93</td>
+                                <td>A (ممتاز)</td>
+                            </tr>
+                            <tr>
+                                <td>85-89</td>
+                                <td>3.33-3.60</td>
+                                <td>A (ممتاز)</td>
+                            </tr>
+                            <tr>
+                                <td>80-84</td>
+                                <td>3.00-3.27</td>
+                                <td>B (جيد جداً)</td>
+                            </tr>
+                            <tr>
+                                <td>75-79</td>
+                                <td>2.67-2.93</td>
+                                <td>B (جيد جداً)</td>
+                            </tr>
+                            <tr>
+                                <td>70-74</td>
+                                <td>2.33-2.60</td>
+                                <td>C (جيد)</td>
+                            </tr>
+                            <tr>
+                                <td>65-69</td>
+                                <td>2.00-2.27</td>
+                                <td>C (جيد)</td>
+                            </tr>
+                            <tr>
+                                <td>60-64</td>
+                                <td>1.67-1.93</td>
+                                <td>D (مقبول)</td>
+                            </tr>
+                            <tr>
+                                <td>50-59</td>
+                                <td>1.00-1.60</td>
+                                <td>D (مقبول)</td>
+                            </tr>
+                            <tr>
+                                <td>0-49</td>
+                                <td>0.00-0.93</td>
+                                <td>F (ضعيف)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>تم التطوير خصيصاً لجامعة بنغازي كلية الهندسة والنفط - جالو | نظام حساب المعدل من 4 نقاط | تحيات م. موسى الرباع</p>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize courses arrays
+            const newCourses = [];
+            const retakeCourses = [];
+            const coursesContainer = document.getElementById('courses-container');
+            
+            // Add new course
+            document.getElementById('add-new-course').addEventListener('click', function() {
+                const hours = parseInt(document.getElementById('new-hours').value);
+                const score = parseInt(document.getElementById('new-score').value);
+                
+                if (isNaN(hours) || hours <= 0 || isNaN(score) || score < 0 || score > 100) {
+                    alert('الرجاء إدخال بيانات صحيحة للمادة الجديدة');
+                    return;
+                }
+                
+                const course = {
+                    type: 'new',
+                    hours: hours,
+                    score: score,
+                    id: Date.now()
+                };
+                
+                newCourses.push(course);
+                renderCourses();
+                
+                // Clear input fields
+                document.getElementById('new-hours').value = '';
+                document.getElementById('new-score').value = '';
+            });
+            
+            // Add retake course
+            document.getElementById('add-retake-course').addEventListener('click', function() {
+                const hours = parseInt(document.getElementById('retake-hours').value);
+                const prevScore = parseInt(document.getElementById('prev-score').value);
+                const currentScore = parseInt(document.getElementById('current-score').value);
+                
+                if (isNaN(hours) || hours <= 0 || 
+                    isNaN(prevScore) || prevScore < 0 || prevScore > 100 || 
+                    isNaN(currentScore) || currentScore < 0 || currentScore > 100) {
+                    alert('الرجاء إدخال بيانات صحيحة للمادة المعادة');
+                    return;
+                }
+                
+                const course = {
+                    type: 'retake',
+                    hours: hours,
+                    prevScore: prevScore,
+                    currentScore: currentScore,
+                    id: Date.now()
+                };
+                
+                retakeCourses.push(course);
+                renderCourses();
+                
+                // Clear input fields
+                document.getElementById('retake-hours').value = '';
+                document.getElementById('prev-score').value = '';
+                document.getElementById('current-score').value = '';
+            });
+            
+            // Render courses in the container
+            function renderCourses() {
+                coursesContainer.innerHTML = '';
+                
+                if (newCourses.length === 0 && retakeCourses.length === 0) {
+                    coursesContainer.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-book-open"></i>
+                            <p>لم تقم بإضافة أي مواد بعد</p>
+                            <p>استخدم الأزرار أعلاه لإضافة مواد جديدة أو معادة</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Add new courses
+                newCourses.forEach(course => {
+                    const courseElement = createCourseElement(course);
+                    coursesContainer.appendChild(courseElement);
+                });
+                
+                // Add retake courses
+                retakeCourses.forEach(course => {
+                    const courseElement = createCourseElement(course);
+                    coursesContainer.appendChild(courseElement);
+                });
+            }
+            
+            // Create course element
+            function createCourseElement(course) {
+                const courseCard = document.createElement('div');
+                courseCard.className = 'course-card';
+                courseCard.dataset.id = course.id;
+                
+                let content = '';
+                
+                if (course.type === 'new') {
+                    content = `
+                        <div class="course-header">
+                            <div class="course-title">مادة جديدة</div>
+                            <button class="delete-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="course-details">
+                            <div><strong>عدد الوحدات:</strong> ${course.hours}</div>
+                            <div><strong>الدرجة:</strong> ${course.score}</div>
+                            <div><strong>النقاط:</strong> ${convertScoreToPoints(course.score).toFixed(2)}</div>
+                        </div>
+                    `;
+                } else {
+                    content = `
+                        <div class="course-header">
+                            <div class="course-title">مادة معادة</div>
+                            <button class="delete-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="course-details">
+                            <div><strong>عدد الوحدات:</strong> ${course.hours}</div>
+                            <div><strong>الدرجة السابقة:</strong> ${course.prevScore}</div>
+                            <div><strong>الدرجة الحالية:</strong> ${course.currentScore}</div>
+                            <div><strong>النقاط السابقة:</strong> ${convertScoreToPoints(course.prevScore).toFixed(2)}</div>
+                            <div><strong>النقاط الحالية:</strong> ${convertScoreToPoints(course.currentScore).toFixed(2)}</div>
+                        </div>
+                    `;
+                }
+                
+                courseCard.innerHTML = content;
+                
+                // Add delete functionality
+                const deleteBtn = courseCard.querySelector('.delete-btn');
+                deleteBtn.addEventListener('click', function() {
+                    const courseId = parseInt(courseCard.dataset.id);
+                    
+                    // Remove from new courses
+                    const newIndex = newCourses.findIndex(c => c.id === courseId);
+                    if (newIndex !== -1) {
+                        newCourses.splice(newIndex, 1);
+                    }
+                    
+                    // Remove from retake courses
+                    const retakeIndex = retakeCourses.findIndex(c => c.id === courseId);
+                    if (retakeIndex !== -1) {
+                        retakeCourses.splice(retakeIndex, 1);
+                    }
+                    
+                    renderCourses();
+                });
+                
+                return courseCard;
+            }
+            
+            // Convert score to grade points according to Benghazi University system
+            function convertScoreToPoints(score) {
+                if (score >= 95) return 4.00;
+                if (score >= 94) return 3.93;
+                if (score >= 93) return 3.87;
+                if (score >= 92) return 3.80;
+                if (score >= 91) return 3.73;
+                if (score >= 90) return 3.67;
+                if (score >= 89) return 3.60;
+                if (score >= 88) return 3.53;
+                if (score >= 87) return 3.47;
+                if (score >= 86) return 3.40;
+                if (score >= 85) return 3.33;
+                if (score >= 84) return 3.27;
+                if (score >= 83) return 3.20;
+                if (score >= 82) return 3.13;
+                if (score >= 81) return 3.07;
+                if (score >= 80) return 3.00;
+                if (score >= 79) return 2.93;
+                if (score >= 78) return 2.87;
+                if (score >= 77) return 2.80;
+                if (score >= 76) return 2.73;
+                if (score >= 75) return 2.67;
+                if (score >= 74) return 2.60;
+                if (score >= 73) return 2.53;
+                if (score >= 72) return 2.47;
+                if (score >= 71) return 2.40;
+                if (score >= 70) return 2.33;
+                if (score >= 69) return 2.27;
+                if (score >= 68) return 2.20;
+                if (score >= 67) return 2.13;
+                if (score >= 66) return 2.07;
+                if (score >= 65) return 2.00;
+                if (score >= 64) return 1.93;
+                if (score >= 63) return 1.87;
+                if (score >= 62) return 1.80;
+                if (score >= 61) return 1.73;
+                if (score >= 60) return 1.67;
+                if (score >= 59) return 1.60;
+                if (score >= 58) return 1.53;
+                if (score >= 57) return 1.47;
+                if (score >= 56) return 1.40;
+                if (score >= 55) return 1.33;
+                if (score >= 54) return 1.27;
+                if (score >= 53) return 1.20;
+                if (score >= 52) return 1.13;
+                if (score >= 51) return 1.07;
+                if (score >= 50) return 1.00;
+                if (score >= 49) return 0.93;
+                if (score >= 48) return 0.87;
+                if (score >= 47) return 0.80;
+                if (score >= 46) return 0.73;
+                if (score >= 45) return 0.67;
+                if (score >= 44) return 0.60;
+                if (score >= 43) return 0.53;
+                if (score >= 42) return 0.47;
+                if (score >= 41) return 0.40;
+                if (score >= 40) return 0.33;
+                if (score >= 39) return 0.27;
+                if (score >= 38) return 0.20;
+                if (score >= 37) return 0.13;
+                if (score >= 36) return 0.07;
+                return 0.00;
+            }
+            
+            // Convert GPA to percentage according to Benghazi University system
+            function convertGPAtoPercentage(gpa) {
+                // حسب لوائح جامعة بنغازي كما أوضحها المستخدم
+                if (gpa <= 1) {
+                    // المعدل بين 0 و1: النسبة = 35 + (المعدل * 15)
+                    return 35 + (gpa * 15);
+                } else if (gpa <= 2) {
+                    // المعدل بين 1 و2: النسبة = 50 + ((المعدل - 1) * 15)
+                    return 50 + ((gpa - 1) * 15);
+                } else if (gpa <= 3) {
+                    // المعدل بين 2 و3: النسبة = 65 + ((المعدل - 2) * 15)
+                    return 65 + ((gpa - 2) * 15);
+                } else {
+                    // المعدل بين 3 و4: النسبة = 80 + ((المعدل - 3) * 20)
+                    return 80 + ((gpa - 3) * 20);
+                }
+            }
+            
+            // Calculate GPA
+            function calculateGPA() {
+                const prevHours = parseFloat(document.getElementById('prev-hours').value) || 0;
+                const prevGPA = parseFloat(document.getElementById('prev-gpa').value) || 0;
+                
+                let termHours = 0;
+                let termPoints = 0;
+                let cumulativeHours = prevHours;
+                let cumulativePoints = prevGPA * prevHours;
+                
+                // Calculate for new courses
+                newCourses.forEach(course => {
+                    const points = convertScoreToPoints(course.score);
+                    termHours += course.hours;
+                    termPoints += points * course.hours;
+                    cumulativeHours += course.hours;
+                    cumulativePoints += points * course.hours;
+                });
+                
+                // Calculate for retake courses
+                retakeCourses.forEach(course => {
+                    const prevPoints = convertScoreToPoints(course.prevScore);
+                    const currentPoints = convertScoreToPoints(course.currentScore);
+                    
+                    // For term GPA, we consider the current points
+                    termHours += course.hours;
+                    termPoints += currentPoints * course.hours;
+                    
+                    // For cumulative GPA, we replace the previous points with current points
+                    cumulativePoints -= prevPoints * course.hours;
+                    cumulativePoints += currentPoints * course.hours;
+                });
+                
+                // Calculate term GPA
+                const termGPA = termHours > 0 ? termPoints / termHours : 0;
+                
+                // Calculate cumulative GPA
+                const cumulativeGPA = cumulativeHours > 0 ? cumulativePoints / cumulativeHours : 0;
+                
+                // Calculate percentage according to university regulations
+                const percentage = convertGPAtoPercentage(cumulativeGPA).toFixed(1);
+                
+                return {
+                    termHours: termHours,
+                    cumulativeHours: cumulativeHours,
+                    termGPA: termGPA.toFixed(2),
+                    cumulativeGPA: cumulativeGPA.toFixed(2),
+                    percentage: percentage + '%',
+                    termProgress: (termGPA * 100 / 4),
+                    cumulativeProgress: (cumulativeGPA * 100 / 4)
+                };
+            }
+            
+            // Calculate button event
+            document.getElementById('calculate-btn').addEventListener('click', function() {
+                if (newCourses.length === 0 && retakeCourses.length === 0) {
+                    alert('الرجاء إضافة مواد جديدة أو معادة أولاً');
+                    return;
+                }
+                
+                const results = calculateGPA();
+                
+                document.getElementById('term-units').textContent = results.termHours;
+                document.getElementById('term-gpa').textContent = results.termGPA;
+                document.getElementById('cumulative-units').textContent = results.cumulativeHours;
+                document.getElementById('cumulative-gpa').textContent = results.cumulativeGPA;
+                document.getElementById('percentage').textContent = results.percentage;
+                
+                // Animate progress bars
+                setTimeout(() => {
+                    document.getElementById('term-progress').style.width = results.termProgress + '%';
+                    document.getElementById('cumulative-progress').style.width = results.cumulativeProgress + '%';
+                }, 100);
+            });
+            
+            // Reset button event
+            document.getElementById('reset-btn').addEventListener('click', function() {
+                // Clear arrays
+                newCourses.length = 0;
+                retakeCourses.length = 0;
+                
+                // Clear input fields
+                document.getElementById('prev-hours').value = '';
+                document.getElementById('prev-gpa').value = '';
+                document.getElementById('new-hours').value = '';
+                document.getElementById('new-score').value = '';
+                document.getElementById('retake-hours').value = '';
+                document.getElementById('prev-score').value = '';
+                document.getElementById('current-score').value = '';
+                
+                // Clear results
+                document.getElementById('term-units').textContent = '-';
+                document.getElementById('term-gpa').textContent = '-';
+                document.getElementById('cumulative-units').textContent = '-';
+                document.getElementById('cumulative-gpa').textContent = '-';
+                document.getElementById('percentage').textContent = '-';
+                document.getElementById('term-progress').style.width = '0%';
+                document.getElementById('cumulative-progress').style.width = '0%';
+                
+                // Render empty courses
+                renderCourses();
+                
+                alert('تم مسح جميع البيانات بنجاح');
+            });
+        });
+    </script>
+</body>
+</html>

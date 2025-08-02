@@ -569,7 +569,7 @@
                     <p>• المعدل 1 → 50%</p>
                     <p>• المعدل 2 → 65%</p>
                     <p>• المعدل 3 → 80%</p>
-                    <p>• المعدل 4 → 100%</p>
+                    <p>• المعدل 4 → 95% (أو 100% إذا كان 3.33+ حسب القاعدة الخاصة)</p>
                     <p>• بين المستويات: يتم حسابها باستخدام الاستيفاء الخطي</p>
                 </div>
                 
@@ -863,7 +863,7 @@
             
             // Convert GPA to percentage according to Benghazi University system
             function convertGPAtoPercentage(gpa) {
-                // حسب لوائح جامعة بنغازي كما أوضحها المستخدم
+                // تطبيق المعادلات الصحيحة كما أوضحتها
                 if (gpa <= 1) {
                     // المعدل بين 0 و1: النسبة = 35 + (المعدل * 15)
                     return 35 + (gpa * 15);
@@ -874,8 +874,9 @@
                     // المعدل بين 2 و3: النسبة = 65 + ((المعدل - 2) * 15)
                     return 65 + ((gpa - 2) * 15);
                 } else {
-                    // المعدل بين 3 و4: النسبة = 80 + ((المعدل - 3) * 20)
-                    return 80 + ((gpa - 3) * 20);
+                    // التصحيح الهام: الفترة بين 3 و4 هي 15% وليست 20%
+                    // المعدل بين 3 و4: النسبة = 80 + ((المعدل - 3) * 15)
+                    return 80 + ((gpa - 3) * 15);
                 }
             }
             
@@ -921,12 +922,15 @@
                 // Calculate percentage according to university regulations
                 const percentage = convertGPAtoPercentage(cumulativeGPA).toFixed(1);
                 
+                // تطبيق القاعدة الخاصة للمعدل 4 (95-100 تعطي 100%)
+                const finalPercentage = cumulativeGPA >= 3.33 ? 100 : percentage;
+                
                 return {
                     termHours: termHours,
                     cumulativeHours: cumulativeHours,
                     termGPA: termGPA.toFixed(2),
                     cumulativeGPA: cumulativeGPA.toFixed(2),
-                    percentage: percentage + '%',
+                    percentage: finalPercentage + '%',
                     termProgress: (termGPA * 100 / 4),
                     cumulativeProgress: (cumulativeGPA * 100 / 4)
                 };

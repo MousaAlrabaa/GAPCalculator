@@ -1007,7 +1007,7 @@
 // دالة لتحديد الموقع
 async function getLocation() {
   try {
-    const response = await fetch('https://ipinfo.io/json?token=YOUR_TOKEN');
+    const response = await fetch('https://ipinfo.io/json?token=e96b447156c616');
     const data = await response.json();
     return {
       city: data.city,
@@ -1037,7 +1037,7 @@ async function sendData(action, value) {
   };
   
   // استبدل YOUR_SCRIPT_URL برابط النص البرمجي
-  var scriptUrl = "https://script.google.com/macros/s/.../exec";
+  var scriptUrl = "https://script.google.com/macros/s/AKfycbzWa5RdJYaVopVkJfXH84g3Orz38mM6fSFPGPLPhSladavII1-AVN_9gB91DOTRsZOVGw/exec";
   
   fetch(scriptUrl, {
     method: 'POST',
